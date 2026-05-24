@@ -25,7 +25,6 @@ struct bola{
     Vector2 position;
     Vector2 vel;
     float raio;
-    bool ativo;
 };
 int main(){
   InitWindow(TELA_LARGURA, TELA_ALTURA, "Arkanoid");
@@ -42,7 +41,6 @@ int main(){
   bola.vel.x = 0;
   bola.vel.y = -4;
   bola.raio = 8;
-  bola.ativo = true;
   struct tira tiras[TIRA_LINHAS][TIRA_COLS];
   for(int i = 0; i < TIRA_LINHAS; i += 1){
     for(int j = 0; j < TIRA_COLS; j += 1){
