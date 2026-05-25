@@ -82,12 +82,12 @@ int main(){
         float hit = ((bola.position.x - (barra.position.x + barra.tamanho.x / 2)) / (barra.tamanho.x / 2));
         bola.vel.x = 4 * hit;
       }
-      bool falta = true;
+      bool nfalta = true;
       bool colidiu = false;
       for(int i = 0; i < TIRA_LINHAS && !colidiu; i += 1){
         for(int j = 0; j < TIRA_COLS && !colidiu; j += 1){
           if(tiras[i][j].ativo){
-            falta = false;
+            nfalta = false;
             struct Rectangle tiraRe;
             tiraRe.x = tiras[i][j].position.x;
             tiraRe.y = tiras[i][j].position.y;
@@ -102,7 +102,7 @@ int main(){
           }
         }
       }
-      if(falta){
+      if(nfalta){
         gamewin = true;
       }
     } else {
