@@ -194,7 +194,7 @@ int main(){
   FILE *file = fopen("data.txt", "a");
   fprintf(file, "log jogatina\n");
   while(a != NULL){
-    fprintf(file, "nivel: %d\nscore%d\n", a->n, a->s);
+    fprintf(file, "nivel: %d\nscore: %d\n", a->n, a->s);
     a = a->next;
   }
   fclose(file);
