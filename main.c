@@ -117,47 +117,47 @@ int main(){
       if(nfalta){
         gamewin = true;
       }
+    //caso o jogador perca ou ganhe
     } else {
-      if(gameover == true){
-        nivel_atual = 1;
-        head->s = 0;
-        a = head->next;
-        while(a != NULL){
-          aux = a;
-          a = a->next;
-          free(aux);
-        }
-        a = head;
-      } else {
-        aux = (struct nivel *)malloc(sizeof(struct nivel));
-        a->next = aux;
-        aux->next = NULL;
-        a->s = score;
-        nivel_atual += 1;
-        a->n = nivel_atual;
-        a = a->next;
-      }
-      bool restart = false;
-      while(!restart){
-        if(IsKeyPressed(KEY_SPACE)){
-          barra.position.x = TELA_LARGURA / 2 - 50;
-          barra.position.y = TELA_ALTURA - 40;
-          bola.position.x = TELA_LARGURA / 2;
-          bola.position.y = TELA_ALTURA / 2;
-          bola.vel.x = 0;
-          bola.vel.y = -4;
-          for(int i = 0; i < TIRA_LINHAS; i += 1){
-            for(int j = 0; j < TIRA_COLS; j += 1){
-              tiras[i][j].ativo = true;
-            }
+      if(IsKeyPressed(KEY_SPACE)){
+        barra.position.x = TELA_LARGURA / 2 - 50;
+        barra.position.y = TELA_ALTURA - 40;
+        bola.position.x = TELA_LARGURA / 2;
+        bola.position.y = TELA_ALTURA / 2;
+        bola.vel.x = 0;
+        bola.vel.y = -4;
+        for(int i = 0; i < TIRA_LINHAS; i += 1){
+          for(int j = 0; j < TIRA_COLS; j += 1){
+            tiras[i][j].ativo = true;
           }
-          restart = true;
         }
+        //log do score
+        if(gameover == true){
+          nivel_atual = 1;
+          head->s = 0;
+          a = head->next;
+          while(a != NULL){
+            aux = a;
+            a = a->next;
+            free(aux);
+          }
+          a = head;
+        } else {
+          aux = (struct nivel *)malloc(sizeof(struct nivel));
+          a->next = aux;
+          aux->next = NULL;
+          a->s = score;
+          nivel_atual += 1;
+          a->n = nivel_atual;
+          a = a->next;
+        }
+        //fim do log
+        score = 0;
+        gameover = false;
+        gamewin = false;
       }
-      score = 0;
-      gameover = false;
-      gamewin = false;
     }
+    //fim do bloco de caso o jogador ganhe ou perca
     BeginDrawing();
     ClearBackground(BLACK);
     struct Rectangle drawbarra;
