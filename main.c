@@ -15,7 +15,7 @@ const int TIRA_STARTX = 50;
 struct nivel{
     int n;
     int s;
-    struct *nivel;
+    struct nivel *next;
 };
 struct barra{
     Vector2 position;
@@ -36,6 +36,7 @@ int main(){
   int nivel_atual = 1;
   struct nivel *head = (struct nivel *)malloc(sizeof(struct nivel));
   head->n = 1;
+  head->next = NULL;
   struct nivel *a = head;
   struct nivel *aux = head;
   InitWindow(TELA_LARGURA, TELA_ALTURA, "Arkanoid");
@@ -130,6 +131,7 @@ int main(){
       } else {
         aux = (struct nivel *)malloc(sizeof(struct nivel));
         a->next = aux;
+        aux->next = NULL;
         a->s = score;
         nivel_atual += 1;
         a->n = nivel_atual;
