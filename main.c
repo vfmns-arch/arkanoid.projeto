@@ -34,7 +34,7 @@ struct bola{
 };
 int main(){
   int nivel_atual = 1;
-  struct nivel *head = (struct nivel)malloc(sizeof(struct nivel));
+  struct nivel *head = (struct nivel *)malloc(sizeof(struct nivel));
   head->n = 1;
   struct nivel *a = head;
   struct nivel *aux = head;
@@ -127,7 +127,7 @@ int main(){
           free(aux);
         }
       } else {
-        aux = (struct nivel)malloc(sizeof(struct nivel));
+        aux = (struct nivel *)malloc(sizeof(struct nivel));
         a->next = aux;
         a->s = score;
         nivel_atual += 1;
