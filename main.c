@@ -125,14 +125,15 @@ int main(){
           aux = a;
           a = a->next;
           free(aux);
-        } else {
-          aux = (struct nivel)malloc(sizeof(struct nivel));
-          a->next = aux;
-          a->s = score;
-          nivel_atual += 1;
-          a->n = nivel_atual;
-          a = a->next;
         }
+      } else {
+        aux = (struct nivel)malloc(sizeof(struct nivel));
+        a->next = aux;
+        a->s = score;
+        nivel_atual += 1;
+        a->n = nivel_atual;
+        a = a->next;
+      }
       if(IsKeyPressed(KEY_SPACE)){
         barra.position.x = TELA_LARGURA / 2 - 50;
         barra.position.y = TELA_ALTURA - 40;
