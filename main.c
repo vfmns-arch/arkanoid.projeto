@@ -100,7 +100,7 @@ int main() {
     head->s = 0;
     head->next = NULL;
     
-    InitWindow(LARGURA_TELA, TELA_ALTURA, "Arkanoid - Cyber Skull Boss");
+    InitWindow(LARGURA_TELA, TELA_ALTURA, "Arkanoid - Beat this up!");
     SetTargetFPS(60);
     
     struct barra barra;
