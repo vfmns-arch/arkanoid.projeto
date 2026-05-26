@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 const int TELA_ALTURA = 600;
 const int TELA_LARGURA = 800;
@@ -11,6 +12,11 @@ const int TIRA_MEIO = 10;
 const int TIRA_STARTY = 50;
 const int TIRA_STARTX = 50;
 
+struct nivel{
+    int n;
+    int s;
+    struct *nivel;
+};
 struct barra{
     Vector2 position;
     Vector2 tamanho;
@@ -27,6 +33,11 @@ struct bola{
     float raio;
 };
 int main(){
+  int nivel_atual = 1;
+  struct nivel *head = (struct nivel)malloc(sizeof(struct nivel));
+  head->n = 1;
+  struct nivel *a = head;
+  struct nivel *aux = head;
   InitWindow(TELA_LARGURA, TELA_ALTURA, "Arkanoid");
   SetTargetFPS(60);
   struct barra barra;
@@ -106,6 +117,22 @@ int main(){
         gamewin = true;
       }
     } else {
+      if(gameover == true){
+        nivel_atual = 1;
+        head->s = 0;
+        a = head->next;
+        while(a != NULL){
+          aux = a;
+          a = a->next;
+          free(aux);
+        } else {
+          aux = (struct nivel)malloc(sizeof(struct nivel));
+          a->next = aux;
+          a->s = score;
+          nivel_atual += 1;
+          a->n = nivel_atual;
+          a = a->next;
+        }
       if(IsKeyPressed(KEY_SPACE)){
         barra.position.x = TELA_LARGURA / 2 - 50;
         barra.position.y = TELA_ALTURA - 40;
