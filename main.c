@@ -142,6 +142,7 @@ int main(){
             free(aux);
           }
           a = head;
+          head->next = NULL;
         } else {
           aux = (struct nivel *)malloc(sizeof(struct nivel));
           a->next = aux;
