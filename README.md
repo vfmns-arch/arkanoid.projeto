@@ -10,6 +10,7 @@ Em seguida, quando abrir, aperte CTRL + J para abrir o terminal, e assim que abr
 
 Clique na seta ao lado do símbolo, e selecione o terminal da Raylib (Raylib Terminal).
 ![alt text](image.png)
-Quando abrir, digite o seguiunte comando: cd C:/Users/USER/Desktop/Jogo-PIF/arkanoid.projeto
+
+Quando abrir, digite o seguiunte comando: cd C:/Users/USER/CaminhoParaOJogo
 Isso abrirá o diretório da pasta do jogo instalada no seu computador.
 Após abrir, apenas digite o comando "make run" (sem as áspas) e aproveite o jogo!
