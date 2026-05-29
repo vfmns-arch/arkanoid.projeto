@@ -11,6 +11,6 @@ Em seguida, quando abrir, aperte CTRL + J para abrir o terminal, e assim que abr
 Clique na seta ao lado do símbolo, e selecione o terminal da Raylib (Raylib Terminal).
 ![alt text](image.png)
 
-Quando abrir, digite o seguiunte comando: cd C:/Users/USER/CaminhoParaOJogo
+Quando abrir, digite o seguiunte comando: cd C:/Users/USER/CaminhoParaOJogo (Pode encontrar isso no proprio terminal do VSCODE ao abrir a pasta no VSCode)
 Isso abrirá o diretório da pasta do jogo instalada no seu computador.
 Após abrir, apenas digite o comando "make run" (sem as áspas) e aproveite o jogo!
