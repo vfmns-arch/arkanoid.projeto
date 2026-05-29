@@ -1,13 +1,13 @@
 
-// Funções para controlar o chefe (boss) do Arkanoid.
+// Funções para controlar o chefe (boss) do Arkanoid
 #include "boss.h"
 #include <math.h>
 
-// Inicializa o boss na posição inicial, define vida e zera projéteis.
+// Inicializa o boss na posição inicial, define vida e zera projéteis
 void InicializarBoss(struct boss_Arkanoid* boss, struct projetil tiros[]) {
     boss->estado = BOSS_INATIVO;
     boss->tamanho_total = (Vector2){ BOSS_COLUNAS * BLCO_TAM, BOSS_LINHAS * BLCO_TAM }; 
-    boss->posicao = (Vector2){ TELA_LARGURA / 2 - boss->tamanho_total.x / 2, -200 }; 
+    boss->posicao = (Vector2){ TELA_LARGURA / 2 - boss->tamanho_total.x / 2, -200 }; // começa fora da tela
     boss->vida_maxima = 24; 
     boss->vida_atual = boss->vida_maxima;
     boss->tempo_ultimo_tiro = 0.0f; boss->tempo_laser = 0.0f;
@@ -15,8 +15,7 @@ void InicializarBoss(struct boss_Arkanoid* boss, struct projetil tiros[]) {
     for (int i = 0; i < MAX_PROJETEIS; i++) tiros[i].ativo = false;
 }
 
-// Atualiza o estado do boss, verifica colisão com bolas e controla vida.
-// Se o boss for atingido, perde vida e pode ser derrotado.
+// Atualiza IA, colisão e ataques do boss
 void AtualizarBoss(struct boss_Arkanoid* boss, struct bola bolas[], struct projetil tiros[], struct barra* barra, int* score, bool* gameover, bool* gamewin, float* velX) {
     if (boss->estado == BOSS_INATIVO) return;
 
@@ -50,21 +49,21 @@ void AtualizarBoss(struct boss_Arkanoid* boss, struct bola bolas[], struct proje
         }
     }
 
-    // Máquina de Estados da IA
+    // Estados do boss
     if (boss->estado == BOSS_CUTSCENE) {
-        if (boss->posicao.y < 80) boss->posicao.y += 2.0f; 
+        if (boss->posicao.y < 80) boss->posicao.y += 2.0f; // anima entrada
         else { boss->estado = BOSS_ATIVO; boss->tempo_ultimo_tiro = GetTime(); boss->tempo_laser = GetTime(); }
     }
     
     if (boss->estado == BOSS_ATIVO) {
-        bool furia = (boss->vida_atual <= (boss->vida_maxima / 2));
+        bool furia = (boss->vida_atual <= (boss->vida_maxima / 2)); // boss fica mais rápido com pouca vida
         if (!boss->carregando_laser && !boss->disparando_laser) {
             boss->posicao.x += *velX;
             if (boss->posicao.x <= 30 || boss->posicao.x + boss->tamanho_total.x >= TELA_LARGURA - 30) *velX *= -1;
         }
         
         float tempoAtual = GetTime();
-        float intervaloTiro = furia ? 1.1f : 1.7f; 
+        float intervaloTiro = furia ? 1.1f : 1.7f; // atira mais rápido se furioso
         if (tempoAtual - boss->tempo_ultimo_tiro >= intervaloTiro && !boss->disparando_laser) {
             int criados = 0;
             for (int i = 0; i < MAX_PROJETEIS && criados < 2; i++) {

@@ -1,25 +1,19 @@
 
-// Funções relacionadas à bola do Arkanoid.
-// Comentários feitos para ajudar estudantes a entender o papel de cada função.
-
-// Funções principais para manipulação das bolas do Arkanoid.
+// Funções principais para manipular as bolas do Arkanoid
 #include "bola.h"
 #include <stdlib.h>
 
 // Inicializa as bolas na posição e estado padrão do início do jogo
-// Coloca todas as bolas na posição inicial e zera efeitos especiais.
 void InicializarBolas(struct bola bolas[]) {
-    bolas[0].position = (Vector2){ TELA_LARGURA / 2, TELA_ALTURA / 2 };
-    bolas[0].vel = (Vector2){ 3, -5 };
+    bolas[0].position = (Vector2){ TELA_LARGURA / 2, TELA_ALTURA / 2 }; // centro da tela
+    bolas[0].vel = (Vector2){ 3, -5 }; // velocidade inicial
     bolas[0].raio = 8;
     bolas[0].ativa = true;
     bolas[0].explosive = false;
-    for (int i = 1; i < MAX_BOLAS; i++) bolas[i].ativa = false;
+    for (int i = 1; i < MAX_BOLAS; i++) bolas[i].ativa = false; // só a primeira ativa
 }
 
-// Atualiza a física, colisão e efeitos das bolas a cada frame
-// Também verifica colisão com barra, blocos e aplica efeitos de power-up
-// Atualiza a física e colisão das bolas. Também ativa efeitos visuais e power-ups.
+// Atualiza física, colisão e efeitos das bolas
 void AtualizarBolas(struct bola bolas[], struct barra* barra, struct tira tiras[TIRA_LINHAS][TIRA_COLS], int* score, int* piscarFrames, struct buffItem* poder, EstadoBoss estadoBoss) {
     for (int b = 0; b < MAX_BOLAS; b++) {
         if (!bolas[b].ativa) continue;
@@ -61,8 +55,9 @@ void AtualizarBolas(struct bola bolas[], struct barra* barra, struct tira tiras[
                         if(CheckCollisionCircleRec(bolas[b].position, bolas[b].raio, tiraRe)) {
                             tiras[i][j].ativo = false;
                             bolas[b].vel.y *= -1;
-                            *score += 10; 
+                            *score += 10; // pontua ao destruir bloco
 
+                            // Efeito explosivo: destrói blocos ao redor
                             if (bolas[b].explosive) {
                                 bolas[b].explosive = false; 
                                 if (i > 0 && tiras[i-1][j].ativo) { tiras[i-1][j].ativo = false; *score += 10; }
@@ -71,6 +66,7 @@ void AtualizarBolas(struct bola bolas[], struct barra* barra, struct tira tiras[
                                 if (j < TIRA_COLS-1 && tiras[i][j+1].ativo) { tiras[i][j+1].ativo = false; *score += 10; }
                             }
 
+                            // Sorteia se dropa um power-up
                             if (!poder->ativo && GetRandomValue(1, 4) == 1) {
                                 poder->ativo = true;
                                 poder->position.x = tiras[i][j].position.x + TIRA_LARGURA / 2 - 7;
