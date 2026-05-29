@@ -5,14 +5,14 @@
 
 //constantes com os tamanhos da tela e das tiras
 //quando for testar o jogo e os sprites estiverem muito grandes ou muito pequenos, ajuste essas constantes
-const int TELA_LARGURA = 800; // Invertido para manter padrão de escrita sem afetar os valores
+const int TELA_LARGURA = 800; 
 const int TELA_ALTURA = 600;
 const int TIRA_LINHAS = 5;
 const int TIRA_COLS = 10;
 const int TIRA_LARGURA = 60;
 const int TIRA_ALTURA = 20;
 const int TIRA_MEIO = 10;
-const int TIRA_STARTY = 80; // Ajustado sutilmente para acomodar a UI e a descida do boss
+const int TIRA_STARTY = 80; 
 const int TIRA_STARTX = 50;
 
 #define MAX_BOLAS 3
@@ -109,7 +109,7 @@ int main() {
     //aloca espaço pro head e preenche seus atributos
     struct nivel *head = (struct nivel *)malloc(sizeof(struct nivel));
     head->n = 1;
-    head->s = 0; // Inicializado explicitamente para evitar lixo de memória
+    head->s = 0; 
     head->next = NULL;
     
     //declara as structs a (atual) e aux (auxiliar), elas começam apontando pro head
@@ -117,7 +117,7 @@ int main() {
     struct nivel *aux = head;
     
     //inicializa a tela, com a largura, altura e o nome
-    InitWindow(TELA_LARGURA, TELA_ALTURA, "Arkanoid - Cyber Skull Boss");
+    InitWindow(TELA_LARGURA, TELA_ALTURA, "Arkanoid - Beat it up!");
     //limita o FPS a 60
     SetTargetFPS(60);
     
@@ -150,8 +150,8 @@ int main() {
     // Inicialização estrutural do Boss composto
     struct boss_Arkanoid boss;
     boss.estado = BOSS_INATIVO;
-    boss.tamanho_total = (Vector2){ BOSS_COLUNAS * BLCO_TAM, BOSS_LINHAS * BLCO_TAM }; // 240x180 total
-    boss.posicao = (Vector2){ TELA_LARGURA / 2 - boss.tamanho_total.x / 2, -200 }; // Começa escondido acima da tela
+    boss.tamanho_total = (Vector2){ BOSS_COLUNAS * BLCO_TAM, BOSS_LINHAS * BLCO_TAM }; 
+    boss.posicao = (Vector2){ TELA_LARGURA / 2 - boss.tamanho_total.x / 2, -200 }; 
     boss.vida_maxima = 24; 
     boss.vida_atual = boss.vida_maxima;
     boss.tempo_ultimo_tiro = 0.0f;
@@ -167,7 +167,7 @@ int main() {
     struct buffItem poder;
     poder.ativo = false;
     poder.tamanho = (Vector2){ 15, 15 };
-    poder.velY = 3.0f; // Velocidade de queda vertical do item dropado
+    poder.velY = 3.0f; 
 
     Color coresLinhas[5] = { RED, ORANGE, YELLOW, GREEN, BLUE };
     struct tira tiras[TIRA_LINHAS][TIRA_COLS];
@@ -181,7 +181,7 @@ int main() {
             tiras[i][j].position.y = TIRA_STARTY + i * (TIRA_ALTURA + TIRA_MEIO);
             //caso a bola não tenha destruido a tira, ela fica ativa
             tiras[i][j].ativo = true;
-            tiras[i][j].color = coresLinhas[i % 5]; // Transiciona as cores baseado na linha atual
+            tiras[i][j].color = coresLinhas[i % 5]; 
         }
     }
     
@@ -189,12 +189,11 @@ int main() {
     int score = 0;
     bool gameover = false;
     bool gamewin = false;
-    int piscarFrames = 0; // Controlador de temporização do efeito visual de hit na barra
+    int piscarFrames = 0; 
     float velBossX = 3.5f;
     
     //enquanto a janela estiver aberta
     while(!WindowShouldClose()) {
-        // Controle de decréscimo do efeito visual de piscar da barra ao rebater
         if (piscarFrames > 0) {
             barra.cor = WHITE;
             piscarFrames--;
@@ -206,7 +205,6 @@ int main() {
         if(!gameover && !gamewin) {
             //muda a posição da barra de acordo com a tecla que apertar
             if(IsKeyDown(KEY_LEFT) && barra.position.x > 0) {
-                //a posição muda de acordo com velocidade, quando testar mudar velocidade caso não esteja boa
                 barra.position.x -= barra.vel;
             }
             if(IsKeyDown(KEY_RIGHT) && barra.position.x + barra.tamanho.x < TELA_LARGURA) {
@@ -244,19 +242,16 @@ int main() {
                     //multiplica a velocidade do eixo x da bola dependendo do quão longe a bola bateu do centro da barra
                     float hit = ((bolas[b].position.x - (barra.position.x + barra.tamanho.x / 2)) / (barra.tamanho.x / 2));
                     bolas[b].vel.x = 6 * hit;
-                    piscarFrames = 6; // Ativa efeito visual de retorno tátil
+                    piscarFrames = 6; 
                 }
                 
                 // Colisão Fase 1 (Blocos tradicionais estruturados)
                 if (boss.estado == BOSS_INATIVO) {
-                    bool falta = false;
                     bool colidiu = false;
                     //checa todas as tiras
                     for(int i = 0; i < TIRA_LINHAS && !colidiu; i++) {
                         for(int j = 0; j < TIRA_COLS && !colidiu; j++) {
                             if(tiras[i][j].ativo) {
-                                //caso a tira esteja ativa, checa colisão com a bola
-                                falta = true;
                                 struct Rectangle tiraRe = { tiras[i][j].position.x, tiras[i][j].position.y, (float)TIRA_LARGURA, (float)TIRA_ALTURA };
                                 if(CheckCollisionCircleRec(bolas[b].position, bolas[b].raio, tiraRe)) {
                                     tiras[i][j].ativo = false;
@@ -265,14 +260,14 @@ int main() {
 
                                     // Lógica de Destruição do Item de Explosão em Cruz
                                     if (bolas[b].explosive) {
-                                        bolas[b].explosive = false; // Consome o modificador ao explodir
+                                        bolas[b].explosive = false; 
                                         if (i > 0 && tiras[i-1][j].ativo) { tiras[i-1][j].ativo = false; score += 10; }
                                         if (i < TIRA_LINHAS-1 && tiras[i+1][j].ativo) { tiras[i+1][j].ativo = false; score += 10; }
                                         if (j > 0 && tiras[i][j-1].ativo) { tiras[i][j-1].ativo = false; score += 10; }
                                         if (j < TIRA_COLS-1 && tiras[i][j+1].ativo) { tiras[i][j+1].ativo = false; score += 10; }
                                     }
 
-                                    // Chance de drop de item manipulador de buffs (25% de probabilidade aleatória)
+                                    // Chance de drop de item (25% de probabilidade aleatória)
                                     if (!poder.ativo && GetRandomValue(1, 4) == 1) {
                                         poder.ativo = true;
                                         poder.position.x = tiras[i][j].position.x + TIRA_LARGURA / 2 - 7;
@@ -281,7 +276,6 @@ int main() {
                                     }
                                     //colidiu = true evita glitch de dupla colisão em um único frame
                                     colidiu = true;
-                                    break;
                                 }
                             }
                         }
@@ -293,13 +287,11 @@ int main() {
                     struct Rectangle bossRec = { boss.posicao.x, boss.posicao.y, boss.tamanho_total.x, boss.tamanho_total.y };
                     if (CheckCollisionCircleRec(bolas[b].position, bolas[b].raio, bossRec)) {
                         
-                        // Descobre as profundidades direcionais de penetração na caixa do Boss
                         float doTopo = (bolas[b].position.y) - boss.posicao.y;
                         float daBase = (boss.posicao.y + boss.tamanho_total.y) - bolas[b].position.y;
                         float daEsquerda = (bolas[b].position.x) - boss.posicao.x;
                         float daDireita = (boss.posicao.x + boss.tamanho_total.x) - bolas[b].position.x;
 
-                        // Determina o vetor de rebatimento exato usando fabsf() para evitar aprisionamento ou inversões incorretas
                         if (doTopo < daBase && doTopo < daEsquerda && doTopo < daDireita) {
                             bolas[b].vel.y = -fabsf(bolas[b].vel.y); 
                             bolas[b].position.y = boss.posicao.y - bolas[b].raio - 1;
@@ -331,28 +323,26 @@ int main() {
             // --- INTELIGÊNCIA ARTIFICIAL E MÁQUINA DE ESTADOS DO BOSS ---
             if (nivel_atual == 2 && boss.estado != BOSS_INATIVO) {
                 if (boss.estado == BOSS_CUTSCENE) {
-                    if (boss.posicao.y < 80) boss.posicao.y += 2.0f; // Interpolação suave para descida em cena de introdução
+                    if (boss.posicao.y < 80) boss.posicao.y += 2.0f; 
                     else {
-                        boss.estado = BOSS_ATIVO; // Libera controle e temporizadores de ataque
+                        boss.estado = BOSS_ATIVO; 
                         boss.tempo_ultimo_tiro = GetTime();
                         boss.tempo_laser = GetTime();
                     }
                 }
                 
                 if (boss.estado == BOSS_ATIVO) {
-                    // Impede o movimento lateral contínuo caso o Boss esteja focado canalizando o Mega Laser
                     if (!boss.carregando_laser && !boss.disparando_laser) {
                         boss.posicao.x += velBossX;
                         if (boss.posicao.x <= 30 || boss.posicao.x + boss.tamanho_total.x >= TELA_LARGURA - 30) {
-                            velBossX *= -1; // Comportamento ping-pong nas extremidades
+                            velBossX *= -1; 
                         }
                     }
                     
                     float tempoAtual = GetTime();
                     bool segundaFase = (boss.vida_atual <= (boss.vida_maxima / 2));
                     
-                    // ATAQUE PADRÃO: Disparos alternados saindo das extremidades inferiores
-                    float intervaloTiro = segundaFase ? 1.1f : 1.7f; // Incrementa cadência de tiro em modo fúria
+                    float intervaloTiro = segundaFase ? 1.1f : 1.7f; 
                     if (tempoAtual - boss.tempo_ultimo_tiro >= intervaloTiro && !boss.disparando_laser) {
                         int criados = 0;
                         for (int i = 0; i < MAX_PROJETEIS && criados < 2; i++) {
@@ -367,29 +357,25 @@ int main() {
                         boss.tempo_ultimo_tiro = tempoAtual;
                     }
                     
-                    // ATAQUE SUPREMO (CONDICIONAL DE METADE DA VIDA): Feixe de Laser Contínuo Cortante
                     if (segundaFase) {
                         if (!boss.carregando_laser && !boss.disparando_laser && (tempoAtual - boss.tempo_laser >= 4.0f)) {
                             boss.carregando_laser = true;
                             boss.tempo_laser = tempoAtual;
-                            boss.laser_x = boss.posicao.x + boss.tamanho_total.x / 2; // Armazena a posição central do boss para fixação do perigo
+                            boss.laser_x = boss.posicao.x + boss.tamanho_total.x / 2; 
                         }
                         
-                        // Estado de Telegrafia visual do ataque por 1.2 segundos
                         if (boss.carregando_laser && (tempoAtual - boss.tempo_laser >= 1.2f)) {
                             boss.carregando_laser = false;
                             boss.disparando_laser = true;
                             boss.tempo_laser = tempoAtual;
                         }
                         
-                        // Canalização do dano do laser por 1.5 segundos na tela
                         if (boss.disparando_laser) {
                             if (tempoAtual - boss.tempo_laser >= 1.5f) {
                                 boss.disparando_laser = false;
                                 boss.tempo_laser = tempoAtual; 
                             }
                             
-                            // Avaliação retangular de intersecção mecânica do laser com a raquete
                             struct Rectangle areaLaser = { boss.laser_x - 25, boss.posicao.y + boss.tamanho_total.y, 50, TELA_ALTURA };
                             struct Rectangle barraRec = { barra.position.x, barra.position.y, barra.tamanho.x, barra.tamanho.y };
                             if (CheckCollisionRecs(areaLaser, barraRec)) {
@@ -399,7 +385,6 @@ int main() {
                     }
                 }
                 
-                // Atualização física e cálculo de letalidade dos projéteis padrão
                 for (int i = 0; i < MAX_PROJETEIS; i++) {
                     if (tiros[i].ativo) {
                         tiros[i].posicao.x += tiros[i].velocidade.x;
@@ -420,7 +405,7 @@ int main() {
             for (int b = 0; b < MAX_BOLAS; b++) if (bolas[b].ativa) algumaBola = true;
             if (!algumaBola) gameover = true;
 
-            // Gerenciamento e aplicação de efeitos ao interceptar os itens coletáveis caindo
+            // Gerenciamento e aplicação de efeitos dos coletáveis
             if (poder.ativo) {
                 poder.position.y += poder.velY; 
                 if (poder.position.y > TELA_ALTURA) poder.ativo = false;
@@ -428,10 +413,15 @@ int main() {
                 struct Rectangle barraRe = { barra.position.x, barra.position.y, barra.tamanho.x, barra.tamanho.y };
                 struct Rectangle buffRe = { poder.position.x, poder.position.y, poder.tamanho.x, poder.tamanho.y };
                 
+                // Verifica colisão do item de poder com a barra do jogador
                 if (CheckCollisionRecs(buffRe, barraRe)) {
-                    poder.ativo = false;
+                    poder.ativo = false; // Desativa o item coletado
+
+                    // Lógica do Power-up: Duplicar Bola
                     if (poder.tipo == BUFF_DUPLICAR) {
                         int bolaReferencia = -1;
+                        
+                        // Encontra a primeira bola que já está em jogo
                         for (int b = 0; b < MAX_BOLAS; b++) {
                             if (bolas[b].ativa) {
                                 bolaReferencia = b;
@@ -439,20 +429,26 @@ int main() {
                             }
                         }
 
+                        // Se encontrou uma bola ativa, cria uma nova a partir dela
                         if (bolaReferencia != -1) {
                             for (int b = 0; b < MAX_BOLAS; b++) {
                                 if (!bolas[b].ativa) { 
                                     bolas[b].position = bolas[bolaReferencia].position;
+                                    // Inverte a velocidade X para que as duas sigam direções opostas
                                     bolas[b].vel = (Vector2){ -bolas[bolaReferencia].vel.x, bolas[bolaReferencia].vel.y };
                                     bolas[b].raio = bolas[bolaReferencia].raio;
                                     bolas[b].explosive = bolas[bolaReferencia].explosive;
-                                    bolas[b].ativa = true;
+                                    bolas[b].ativa = true; // Ativa a bola reserva
                                     break; 
                                 }
                             }
                         }
+                    // Lógica do Power-up: Bola Explosiva
                     } else if (poder.tipo == BUFF_EXPLOSAO) {
-                        for (int b = 0; b < MAX_BOLAS; b++) if (bolas[b].ativa) bolas[b].explosive = true;
+                        // Aplica o efeito de explosão em todas as bolas atualmente ativas
+                        for (int b = 0; b < MAX_BOLAS; b++) {
+                            if (bolas[b].ativa) bolas[b].explosive = true;
+                        }
                     }
                 }
             }
@@ -464,7 +460,6 @@ int main() {
                     for(int j = 0; j < TIRA_COLS; j++)
                         if(tiras[i][j].ativo) blocosRestantes = true;
                 
-                //se não faltar tiras, ao invés de vitória direta, avança para a Boss Battle
                 if(!blocosRestantes && nivel_atual == 1) {
                     nivel_atual = 2;
                     boss.estado = BOSS_CUTSCENE;
@@ -491,6 +486,40 @@ int main() {
                 poder.ativo = false;
                 for (int i = 0; i < MAX_PROJETEIS; i++) tiros[i].ativo = false;
                 boss.carregando_laser = false; boss.disparando_laser = false;
+
+                if(gameover || gamewin) { // Adicionamos 'gamewin' aqui para o reset funcionar
+                  nivel_atual = 1;
+                  boss.estado = BOSS_INATIVO;
+                  boss.posicao.y = -200;
+                  boss.vida_atual = boss.vida_maxima; // Reseta a vida do boss
+
+                  // Reseta as tiras da Fase 1
+                  for(int i = 0; i < TIRA_LINHAS; i++) {
+                      for(int j = 0; j < TIRA_COLS; j++) tiras[i][j].ativo = true;
+                  }
+
+                  // Limpa a lista encadeada de níveis
+                  head->s = 0;
+                  a = head->next;
+                  while(a != NULL) {
+                      aux = a;
+                      a = a->next;
+                      free(aux);
+                  }
+                  a = head;
+                  head->next = NULL;
+              } else {
+                  // Lógica de avanço para o nível 2 (se ainda não estiver no Boss)
+                  if (nivel_atual == 1) {
+                      aux = (struct nivel *)malloc(sizeof(struct nivel));
+                      a->next = aux;
+                      aux->next = NULL;
+                      a->s = score;
+                      nivel_atual = 2; // Garante que vai para o 2
+                      a->n = nivel_atual;
+                      a = a->next;
+                  }
+              }
                 
                 //o score é logado nas structs
                 if(gameover == true) {
@@ -525,7 +554,6 @@ int main() {
 
         //essa parte do codigo desenha os sprites a cada frame
         BeginDrawing();
-        //set a cor do fundo pra preto
         ClearBackground(BLACK);
         
         struct Rectangle drawbarra = { barra.position.x, barra.position.y, barra.tamanho.x, barra.tamanho.y };
@@ -564,7 +592,6 @@ int main() {
                 }
             }
             
-            // Desenho dos Feixes do Ataque Laser 
             if (boss.estado == BOSS_ATIVO && fúria) {
                 if (boss.carregando_laser) {
                     if ((int)(GetTime() * 10) % 2 == 0) {
@@ -579,7 +606,6 @@ int main() {
                 }
             }
             
-            // Exibir barra de vida do boss com mudança de cor dinâmica e indicador de modo fúria
             if (boss.estado == BOSS_ATIVO) {
                 float percentual = (float)boss.vida_atual / boss.vida_maxima;
                 DrawRectangle(boss.posicao.x, boss.posicao.y - 20, boss.tamanho_total.x, 6, RED);
@@ -620,7 +646,7 @@ int main() {
     FILE *file = fopen("data.txt", "a");
     if (file != NULL) {
         fprintf(file, "log jogatina\n");
-        struct nivel *temp_save = head; // Usa cópia para evitar perda de ponteiro estrutural
+        struct nivel *temp_save = head; 
         while(temp_save != NULL && temp_save->next != NULL){ 
             fprintf(file, "nivel: %d\nscore: %d\n", temp_save->n, temp_save->s);
             temp_save = temp_save->next;
